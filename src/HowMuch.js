@@ -315,7 +315,6 @@ class HowMuch extends React.Component {
     }
 
     let kwatt = this.calculateKW();
-    let numhomes = this.calculateNumHomes();
     let domestic = this.calculateDomestic();
 
     let details = null;
@@ -335,8 +334,8 @@ class HowMuch extends React.Component {
         unit = "megawatt";
       }
 
-      details = <div>
-                  consumes
+      details = <span className={styles.details}>
+                  consumes&nbsp;
                   <NumericInput min={0.1} max={50.0} value={c.power/1000}
                                 step={0.5}
                                 onChange={(value)=>{this.slotCustomPower(value)}}/>&nbsp;
@@ -354,7 +353,7 @@ class HowMuch extends React.Component {
                                 step={100}
                                 onChange={(value)=>{this.slotCustomACores(value)}}/>&nbsp;
                   accelerator cores.
-                </div>
+                </span>
     }
     else{
       let c = this.getComputer();
@@ -363,54 +362,67 @@ class HowMuch extends React.Component {
       cpower = c.power;
 
       if (c.is_calculated){
-        details = <div>
+        details = <span className={styles.details}>
                     is estimated to consume {round(c.power/1000, 3)} megawatts (based
                     on the average efficiency of {round(c.tflops/c.power, 1)} GFLOPs / Watt
-                    of its year, and a reported RMax speed of {c.tflops} TFLOPs.
-                  </div>
+                    of its year, and a reported RMax speed of {c.tflops} TFLOPs).
+                  </span>
       }
       else{
-        details = <div>
+        details = <span className={styles.details}>
                     is reported to consume {c.power/1000} megawatts to achieve a reported
                     RMax speed of {c.tflops} TFLOPs (an efficiency
                     of {round(c.tflops/c.power,1)} GFLOPs / Watt).
-                  </div>
+                  </span>
       }
     }
 
     return <div className={styles.container}>
-             <div>
-              <Select options={computers}
-                      value={computer}
-                      onChange={(item)=>{this.slotSelectComputer(item.value);}}/>&nbsp;
+             <div class="w3-panel w3-pale-green w3-leftbar w3-rightbar w3-border-green w3-padding-16"
+                  className={styles.computer}>
+              <div className={styles.selectComputer}>
+                <Select options={computers}
+                        value={computer}
+                        onChange={(item)=>{this.slotSelectComputer(item.value);}}/>
+              </div>&nbsp;
               {details}
+              <div className={styles.computer}>
+                Assuming a PUE of&nbsp;
+                <NumericInput min={1.0} max={2.0} value={this.state.pue}
+                              step={0.1}
+                              onChange={(value)=>{this.slotChangePUE(value)}}/>&nbsp;
+                it will burn electricity at a rate
+                of <span className={styles.result}>
+                      {round(0.001 * cpower * this.state.pue, 3)} megawatts
+                   </span>.
+              </div>
              </div>
-             <div>
-              Assuming a PUE of&nbsp;
-              <NumericInput min={1.0} max={2.0} value={this.state.pue}
-                            step={0.1}
-                            onChange={(value)=>{this.slotChangePUE(value)}}/>&nbsp;
-              it will burn electricity at a rate
-              of {round(0.001 * cpower * this.state.pue, 3)} megawatts.
-             </div>
-             <div>
+
+             <div class="w3-panel w3-pale-yellow w3-leftbar w3-rightbar w3-border-yellow w3-padding-16"
+                  className={styles.domestic}>
                Compared to the average domestic electricity consumption in {the}&nbsp;
-               <Select options={places}
-                       value={place}
-                       onChange={(item)=>{this.slotSelectPlace(item.value);}}/>,&nbsp;
+               <div className={styles.selectPlace}>
+                 <Select options={places}
+                         value={place}
+                         onChange={(item)=>{this.slotSelectPlace(item.value);}}/>
+               </div>,&nbsp;
                this is the same as powering&nbsp;
                <span className={styles.result}>
                  {this.calculateNumHomes(false)}
                </span>.
              </div>
-             <div>
+
+             <div class="w3-panel w3-pale-red w3-leftbar w3-rightbar w3-border-red w3-padding-16"
+                  className={styles.job}>
                The electricity consumed to run a job for&nbsp;
                <NumericInput min={0.0} max={100.0} value={this.state.count}
                                 step={1}
                                 onChange={(value)=>{this.slotChangeCount(value)}}/>
-               <Select options={times}
-                      value={time}
-                      onChange={(item)=>{this.slotChangeTime(item.value);}}/>&nbsp;
+               <div className={styles.selectUnit}>
+                 <Select options={times}
+                        value={time}
+                        onChange={(item)=>{this.slotChangeTime(item.value);}}/>
+               </div>,&nbsp;
                that uses&nbsp;
                <NumericInput min={0.1} max={100.0} value={this.state.percent}
                             step={5}
@@ -421,12 +433,13 @@ class HowMuch extends React.Component {
                home in {the} {this.state.place} for&nbsp;
                <span className={styles.result}>{domestic}</span>.
              </div>
-             <div className={styles.explainer}>
-               This is based on the total power consumption of the average home
-               in {the} {this.state.place} being {this.getPlace()} kWh per year.
-             </div>
-             <div className={styles.sources}>
-               <ul>
+
+             <div class="w3-panel w3-pale-blue w3-leftbar w3-rightbar w3-border-blue w3-padding-16"
+                  className={styles.sources}>
+               <ul class="w3-ul">
+                 <li> The total electricity consumption of the average home
+                      in {the} {this.state.place} is {this.getPlace()} kWh per year, which
+                      is an average of {round(1000 * this.getPlace() / (365*24),0)} Watts.</li>
                  <li>Supercomputer power information taken from the&nbsp;
                      <a href="https://top500.org">Top500</a></li>
                  <li>Average domestic power consumption in 2014 taken from&nbsp;
@@ -438,6 +451,17 @@ class HowMuch extends React.Component {
                      <a href="https://www.ovoenergy.com/guides/energy-guides/how-much-electricity-does-a-home-use.html">
                        OVO Energy guides
                      </a>
+                 </li>
+                 <li>The PUE is the "power utilisation efficiency", and relates the
+                     electricity consumed by a data center to the actual electricity
+                     consumed by the computers in the date center. The PUE will always
+                     be greater than 1.0 as some electricity is needed to power cooling,
+                     lighting, security etc. According
+                     to <a href="https://journal.uptimeinstitute.com/is-pue-actually-going-up/">
+                       this paper
+                     </a> the average PUE is about 1.6. You
+                     can <a href="https://www.42u.com/measurement/pue-dcie.htm">calculate PUEs here</a>. This
+                     suggests that the average PUE is about 2.0, while 1.2 represents a "very efficient" data center.
                  </li>
                </ul>
              </div>
