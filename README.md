@@ -1,4 +1,4 @@
-# How Much is Enough?
+# How Much is Enough?
 
 [Visit the site](https://chryswoods.github.io/howmuchisenough)
 
