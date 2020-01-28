@@ -8,6 +8,15 @@ import styles from './HowMuch.module.css';
 import power from './power.json';
 import homes from './homes.json';
 
+/* This is a very simple react webapp that has been put together in 2 days
+   to help researchers compare the amount of electricity used by their
+   supercomputing jobs to the amount of electricity used in their
+   domestic lives.
+
+   (C) Christopher Woods, University of Bristol, 2020
+
+   Released under the
+
 function round(value, places=2){
   return Number(Math.round(parseFloat(value + 'e' + places))
                  + 'e-' + places).toFixed(places);
@@ -462,6 +471,28 @@ class HowMuch extends React.Component {
                      </a> the average PUE is about 1.6. You
                      can <a href="https://www.42u.com/measurement/pue-dcie.htm">calculate PUEs here</a>. This
                      suggests that the average PUE is about 2.0, while 1.2 represents a "very efficient" data center.
+                 </li>
+                 <li>
+                   All information is presented in good faith based on values reported in
+                   the above sources. The rationale for any estimated power consumptions of
+                   of supercomputers is given (essentially the median computational efficiency
+                   for the Top500 for the year the supercomputer is last published, multiplied
+                   by the reported Rmax value). If you want to correct any information or have
+                   any questions then
+                   please <a href="https://github.com/chryswoods/howmuchisenough">lodge an issue</a>
+                   and we will do our best to respond.
+                 </li>
+                 <li>
+                   Note that the data is based on power consumption of the supercomputer during
+                   the linpack run used for its Top500 submission (the way this is measured
+                   is <a href="https://www.top500.org/green500/">described on the Green500 site).</a> This is for illustration only,
+                   and is not going to be exactly equal to the day-to-day power consumption of
+                   the supercomputer, as this will vary with the type of workload. However, it
+                   is useful to help illustrate a comparison to domestic energy consumption. It
+                   is hoped that this will encourage researchers to think carefully about the
+                   electricity costs of their supercomputer jobs, so that they take the time and
+                   effort needed to plan their experiments and optimise their codes so that
+                   they use the minimum electricity in the most efficient possible way.
                  </li>
                </ul>
              </div>
