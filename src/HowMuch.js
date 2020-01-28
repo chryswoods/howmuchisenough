@@ -15,7 +15,8 @@ import homes from './homes.json';
 
    (C) Christopher Woods, University of Bristol, 2020
 
-   Released under the
+   Released under the MIT license
+*/
 
 function round(value, places=2){
   return Number(Math.round(parseFloat(value + 'e' + places))
