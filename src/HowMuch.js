@@ -480,8 +480,8 @@ class HowMuch extends React.Component {
                    for the Top500 for the year the supercomputer is last published, multiplied
                    by the reported Rmax value). If you want to correct any information or have
                    any questions then
-                   please <a href="https://github.com/chryswoods/howmuchisenough">lodge an issue</a>
-                   and we will do our best to respond.
+                   please <a href="https://github.com/chryswoods/howmuchisenough">lodge an issue</a> and
+                   we will do our best to respond.
                  </li>
                  <li>
                    Note that the data is based on power consumption of the supercomputer during
