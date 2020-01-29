@@ -383,12 +383,31 @@ class HowMuch extends React.Component {
     keys = Object.keys(power);
     keys.sort();
 
+    let grouped = {};
+
     for (let i=0; i<keys.length; ++i){
-      computers.push({value:keys[i], label:keys[i]});
+      let c = {value:keys[i], label:keys[i]};
+
+      let year = power[keys[i]].year;
+
+      if (!grouped[year]){
+        grouped[year] = [];
+      }
+
+      grouped[year].push(c);
 
       if (this.state.computer === keys[i]){
-        computer = computers[i+1];
+        computer = c;
       }
+    }
+
+    let years = Object.keys(grouped);
+    years.sort();
+
+    for (let i=years.length-1; i>=0; --i){
+      let year = years[i];
+
+      computers.push({label:year, options:grouped[year]});
     }
 
     if (this.isCustomComputer()){
@@ -446,12 +465,12 @@ class HowMuch extends React.Component {
         details = <span className={styles.details}>
                     is estimated to consume {round(c.power/1000, 3)} megawatts (based
                     on the average efficiency of {round(c.tflops/c.power, 1)} GFLOPs / Watt
-                    of its year, and a reported RMax speed of {c.tflops} TFLOPs).
+                    of its year, and a reported RMax speed of {c.tflops} TFLOPs in {c.year}).
                   </span>
       }
       else{
         details = <span className={styles.details}>
-                    is reported to consume {c.power/1000} megawatts to achieve a reported
+                    was reported in {c.year} to consume {c.power/1000} megawatts to achieve a reported
                     RMax speed of {c.tflops} TFLOPs (an efficiency
                     of {round(c.tflops/c.power,1)} GFLOPs / Watt).
                   </span>
@@ -466,8 +485,8 @@ class HowMuch extends React.Component {
                         value={computer}
                         onChange={(item)=>{this.slotSelectComputer(item.value);}}/>
               </div>&nbsp;
-              {details}
-              <div className={styles.computer}>
+              {details}&nbsp;
+              <span className={styles.computer}>
                 Assuming a PUE of&nbsp;
                 <NumericInput min={1.0} max={2.0} value={this.state.pue}
                               step={0.1}
@@ -476,7 +495,7 @@ class HowMuch extends React.Component {
                 of <span className={styles.result}>
                       {round(0.001 * cpower * this.state.pue, 3)} megawatts
                    </span>.
-              </div>
+              </span>
              </div>
 
              <div class="w3-panel w3-pale-yellow w3-leftbar w3-rightbar w3-border-yellow w3-padding-16"
