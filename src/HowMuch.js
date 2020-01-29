@@ -25,6 +25,16 @@ function round(value, places=2){
 
 let custom_computer = "A custom supercomputer";
 
+// conversion factors for energy to CO2 equivalent - taken from official
+// UK government 2019 figures used by businesses to report their
+// CO2 (https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2019)
+let kwh_to_c02 = 0.2556; // kg CO2e per kWh
+let air_km_to_c02 = 0.14981; // kg CO2e - long haul, economy to/from UK, includes
+                             // radiative forcing, kg CO2e per km travelled
+
+let nw_to_lon = 5567; // distance in km from New York to London for a flight
+                      // according to Google
+
 class HowMuch extends React.Component {
   constructor(props){
     super(props);
@@ -223,11 +233,15 @@ class HowMuch extends React.Component {
     }
   }
 
-  calculateDomestic(){
+  _calculateKWH(scale=true){
     let time = this.state.times[this.state.time][1] * this.state.count;
-    let kWh = this.calculatePower() * time;
+    let kWh = this.calculatePower(scale) * time;
+    return kWh;
+  }
 
-    time = kWh / this.getPlacePower();
+  calculateDomestic(scale=true){
+    let kWh = this._calculateKWH(scale);
+    let time = kWh / this.getPlacePower();
 
     let unit = "hour";
     let s = "s";
@@ -256,6 +270,63 @@ class HowMuch extends React.Component {
     }
 
     return `${time} ${unit}${s}`;
+  }
+
+  calculateKWh(scale=true){
+    let kWh = this._calculateKWH(scale);
+    return `${round(kWh,0)} kWh`;
+  }
+
+  _calculateCO2(scale=true){
+    let kWh = this._calculateKWH(scale);
+    return kWh * kwh_to_c02;
+  }
+
+  calculateCO2(scale=true){
+    let co2 = this._calculateCO2(scale);
+
+    if (co2 < 1){
+      return `${round(co2/1000,3)} g`;
+    }
+    else if (co2 < 10){
+      return `${round(co2, 1)} kg`;
+    }
+    else if (co2 > 100000){
+      return `${round(co2/1000, 0)} tonnes`;
+    }
+    else if (co2 > 2000){
+      return `${round(co2/1000, 1)} tonnes`;
+    }
+    else{
+      return `${round(co2,0)} kg`;
+    }
+  }
+
+  calculateAirKm(scale=true){
+    let co2 = this._calculateCO2(scale);
+    let km = co2 / air_km_to_c02;
+
+    return `${round(km,0)} km`;
+  }
+
+  calculateLonNY(scale=true){
+    let co2 = this._calculateCO2(scale);
+    let km = co2 / air_km_to_c02;
+
+    if (km > nw_to_lon){
+      let times = km / nw_to_lon;
+
+      if (times > 20){
+        times = round(times, 0);
+      }
+      else{
+        times = round(times, 1);
+      }
+
+      return <span>&nbsp;This is <span className={styles.result}>{times}</span> times the
+               distance from London to New York!
+             </span>
+    }
   }
 
   placeHasThe(){
@@ -444,6 +515,15 @@ class HowMuch extends React.Component {
                <span className={styles.result}>{domestic}</span>.
              </div>
 
+             <div class="w3-panel w3-light-gray w3-leftbar w3-rightbar w3-border-black w3-padding-16"
+                  className={styles.co2}>
+               This job will consume {this.calculateKWh(true)}. Generating this amount of electricity
+               in the UK would emit <span className={styles.result}>{this.calculateCO2(true)}</span> of
+               carbon dioxide (CO2 equivalent). This is the same amount as flying
+               long haul economy for <span className={styles.result}>{this.calculateAirKm(true)}</span>.
+               {this.calculateLonNY()}
+             </div>
+
              <div class="w3-panel w3-pale-blue w3-leftbar w3-rightbar w3-border-blue w3-padding-16"
                   className={styles.sources}>
                <ul class="w3-ul">
@@ -461,6 +541,23 @@ class HowMuch extends React.Component {
                      <a href="https://www.ovoenergy.com/guides/energy-guides/how-much-electricity-does-a-home-use.html">
                        OVO Energy guides
                      </a>
+                 </li>
+                 <li>
+                   Conversion of energy consumption to CO2 equivalent taken from
+                   the <a href="https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2019">
+                     UK Government Greenhouse gas reporting conversion factors, 2019
+                   </a>. The conversion figure used is {kwh_to_c02} kg CO2 equivalent per kilowatt
+                   hour of electricity, which is the average for the UK grid. This is
+                   then related to air travel using {air_km_to_c02} kg CO2 equivalent per kilometer
+                   of air travel, assuming economy class long haul flights that start or end
+                   in the UK. The "Radiative Forcing" (RF) equivalent is used, as this
+                   accounts for the additional impact of aviation, e.g. emissions of
+                   nitrous oxides and water vapour at high altitude.
+                 </li>
+                 <li>
+                   The air travel distance from London to New York is,
+                   is <a href="https://www.google.com/search?q=distance+london+to+new+york+in+km&oq=distance+london+to+new+york+in+km">according to Google</a>,
+                   {nw_to_lon} km
                  </li>
                  <li>The PUE is the "power utilisation efficiency", and relates the
                      electricity consumed by a data center to the actual electricity
