@@ -7,41 +7,46 @@
   background-color: white;
   line-height: 1.2;
   padding-bottom: 15px;
+  font-family: 'Questrial', sans-serif;
+  font-size: 11pt;
 }
 
 .container input {
-  max-width: 100px;
+  max-width: 85px;
 }
-
 
 .selectComputer {
   display: inline-block;
-  width: 25ch;
+  width: 30ch;
   max-width: 400px;
   min-width: 200px;
 }
 
 .selectPlace {
   display: inline-block;
-  width: 20ch;
+  width: 22ch;
   max-width: 400px;
   min-width: 100px;
 }
 
 .selectUnit {
   display: inline-block;
-  width: 10ch;
+  width: 12ch;
   max-width: 400px;
   min-width: 100px;
 }
 
 .result {
   color: red;
-  font-size: x-large;
+  font-size: 20pt;
   font-style: bold;
   white-space: nowrap;
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 .sources {
-  font-size: small;
+  font-size: 8pt;
 }

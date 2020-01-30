@@ -20,7 +20,7 @@ import homes from './homes.json';
 
 function round(value, places=2){
   return Number(Math.round(parseFloat(value + 'e' + places))
-                 + 'e-' + places).toFixed(places);
+                 + 'e-' + places).toFixed(places).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 let custom_computer = "A custom supercomputer";
@@ -436,23 +436,27 @@ class HowMuch extends React.Component {
 
       details = <span className={styles.details}>
                   consumes&nbsp;
+                  <span className={styles.nowrap}>
                   <NumericInput min={0.1} max={50.0} value={c.power/1000}
                                 step={0.5}
                                 onChange={(value)=>{this.slotCustomPower(value)}}/>&nbsp;
-                  {unit}, and runs at an Rmax speed of&nbsp;
+                  {unit}</span>, and runs at an Rmax speed of&nbsp;
+                  <span className={styles.nowrap}>
                   <NumericInput min={1} max={1000000} value={c.tflops}
                                 step={100}
                                 onChange={(value)=>{this.slotCustomTFLOPs(value)}}/>&nbsp;
-                  TFLOPs. This is an efficiency of {round(c.tflops/c.power, 1)} GFLOPs/Watt.
+                  TFLOPs</span>. This is an efficiency of {round(c.tflops/c.power, 1)} GFLOPs/Watt.
                   It contains&nbsp;
+                  <span className={styles.nowrap}>
                   <NumericInput min={1} max={1000000} value={c.cores}
                                 step={100}
                                 onChange={(value)=>{this.slotCustomCores(value)}}/>&nbsp;
-                  cores and&nbsp;
+                  cores</span> and&nbsp;
+                  <span className={styles.nowrap}>
                   <NumericInput min={1} max={1000000} value={c.acores}
                                 step={100}
                                 onChange={(value)=>{this.slotCustomACores(value)}}/>&nbsp;
-                  accelerator cores.
+                  accelerator</span> cores.
                 </span>
     }
     else{
@@ -463,23 +467,22 @@ class HowMuch extends React.Component {
 
       if (c.is_calculated){
         details = <span className={styles.details}>
-                    is estimated to consume {round(c.power/1000, 3)} megawatts (based
-                    on the average efficiency of {round(c.tflops/c.power, 1)} GFLOPs / Watt
-                    of its year, and a reported RMax speed of {c.tflops} TFLOPs in {c.year}).
+                    is estimated to consume <span className={styles.nowrap}>{round(c.power/1000, 3)} megawatts</span> (based
+                    on the average efficiency of <span className={styles.nowrap}>{round(c.tflops/c.power, 1)} GFLOPs / Watt</span>
+                    of its year, and a reported RMax speed of <span className={styles.nowrap}>{c.tflops} TFLOPs</span> in {c.year}).
                   </span>
       }
       else{
         details = <span className={styles.details}>
-                    was reported in {c.year} to consume {c.power/1000} megawatts to achieve a reported
-                    RMax speed of {c.tflops} TFLOPs (an efficiency
-                    of {round(c.tflops/c.power,1)} GFLOPs / Watt).
+                    was reported in {c.year} to consume <span className={styles.nowrap}>{round(c.power/1000, 3)} megawatts</span> to achieve a reported
+                    RMax speed of <span className={styles.nowrap}>{c.tflops} TFLOPs</span> (an efficiency
+                    of <span className={styles.nowrap}>{round(c.tflops/c.power,1)} GFLOPs / Watt</span>).
                   </span>
       }
     }
 
     return <div className={styles.container}>
-             <div class="w3-panel w3-pale-green w3-leftbar w3-rightbar w3-border-green w3-padding-16"
-                  className={styles.computer}>
+             <div className="w3-panel w3-pale-green w3-leftbar w3-rightbar w3-border-green w3-padding-16">
               <div className={styles.selectComputer}>
                 <Select options={computers}
                         value={computer}
@@ -498,8 +501,7 @@ class HowMuch extends React.Component {
               </span>
              </div>
 
-             <div class="w3-panel w3-pale-yellow w3-leftbar w3-rightbar w3-border-yellow w3-padding-16"
-                  className={styles.domestic}>
+             <div className="w3-panel w3-pale-yellow w3-leftbar w3-rightbar w3-border-yellow w3-padding-16">
                Compared to the average domestic electricity consumption in {the}&nbsp;
                <div className={styles.selectPlace}>
                  <Select options={places}
@@ -512,17 +514,17 @@ class HowMuch extends React.Component {
                </span>.
              </div>
 
-             <div class="w3-panel w3-pale-red w3-leftbar w3-rightbar w3-border-red w3-padding-16"
-                  className={styles.job}>
+             <div className="w3-panel w3-pale-red w3-leftbar w3-rightbar w3-border-red w3-padding-16">
                The electricity consumed to run a job for&nbsp;
+               <span className={styles.nowrap}>
                <NumericInput min={0.0} max={100.0} value={this.state.count}
                                 step={1}
                                 onChange={(value)=>{this.slotChangeCount(value)}}/>
-               <div className={styles.selectUnit}>
+               <span className={styles.selectUnit}>
                  <Select options={times}
                         value={time}
                         onChange={(item)=>{this.slotChangeTime(item.value);}}/>
-               </div>,&nbsp;
+               </span></span>,&nbsp;
                that uses&nbsp;
                <NumericInput min={0.1} max={100.0} value={this.state.percent}
                             step={5}
@@ -534,8 +536,7 @@ class HowMuch extends React.Component {
                <span className={styles.result}>{domestic}</span>.
              </div>
 
-             <div class="w3-panel w3-light-gray w3-leftbar w3-rightbar w3-border-black w3-padding-16"
-                  className={styles.co2}>
+             <div className="w3-panel w3-light-gray w3-leftbar w3-rightbar w3-border-black w3-padding-16">
                This job will consume {this.calculateKWh(true)}. Generating this amount of electricity
                in the UK would emit <span className={styles.result}>{this.calculateCO2(true)}</span> of
                carbon dioxide (CO2 equivalent). This is the same amount as flying
@@ -543,77 +544,80 @@ class HowMuch extends React.Component {
                {this.calculateLonNY()}
              </div>
 
-             <div class="w3-panel w3-pale-blue w3-leftbar w3-rightbar w3-border-blue w3-padding-16"
-                  className={styles.sources}>
-               <ul class="w3-ul">
-                 <li> The total electricity consumption of the average home
-                      in {the} {this.state.place} is {this.getPlace()} kWh per year, which
-                      is an average of {round(1000 * this.getPlace() / (365*24),0)} Watts.</li>
-                 <li>Supercomputer power information taken from the&nbsp;
-                     <a href="https://top500.org">Top500</a></li>
-                 <li>Average domestic power consumption in 2014 taken from&nbsp;
-                     <a href="https://www.wec-indicators.enerdata.eu/household-electricity-use.html">
-                       World Energy Forum figures
-                     </a>
-                 </li>
-                 <li>Average domestic energy consumption in UK in 2019 taken from&nbsp;
-                     <a href="https://www.ovoenergy.com/guides/energy-guides/how-much-electricity-does-a-home-use.html">
-                       OVO Energy guides
-                     </a>
-                 </li>
-                 <li>
-                   Conversion of energy consumption to CO2 equivalent taken from
-                   the <a href="https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2019">
-                     UK Government Greenhouse gas reporting conversion factors, 2019
-                   </a>. The conversion figure used is {kwh_to_c02} kg CO2 equivalent per kilowatt
-                   hour of electricity, which is the average for the UK grid. This is
-                   then related to air travel using {air_km_to_c02} kg CO2 equivalent per kilometer
-                   of air travel, assuming economy class long haul flights that start or end
-                   in the UK. The "Radiative Forcing" (RF) equivalent is used, as this
-                   accounts for the additional impact of aviation, e.g. emissions of
-                   nitrous oxides and water vapour at high altitude.
-                 </li>
-                 <li>
-                   The air travel distance from London to New York
-                   is, <a href="https://www.google.com/search?q=distance+london+to+new+york+in+km&oq=distance+london+to+new+york+in+km">according to Google</a>,
-                   {nw_to_lon} km
-                 </li>
-                 <li>The PUE is the "power utilisation efficiency", and relates the
-                     electricity consumed by a data center to the actual electricity
-                     consumed by the computers in the date center. The PUE will always
-                     be greater than 1.0 as some electricity is needed to power cooling,
-                     lighting, security etc. According
-                     to <a href="https://journal.uptimeinstitute.com/is-pue-actually-going-up/">
-                       this paper
-                     </a> the average PUE is about 1.6. You
-                     can <a href="https://www.42u.com/measurement/pue-dcie.htm">calculate PUEs here</a>. This
-                     suggests that the average PUE is about 2.0, while 1.2 represents a "very efficient" data center.
-                 </li>
-                 <li>
-                   All information is presented in good faith based on values reported in
-                   the above sources. The rationale for any estimated power consumptions
-                   of supercomputers is given (essentially the median computational efficiency
-                   for the Top500 for the year the supercomputer is last published, multiplied
-                   by the reported Rmax value). If you want to correct any information or have
-                   any questions then
-                   please <a href="https://github.com/chryswoods/howmuchisenough">lodge an issue</a> and
-                   we will do our best to respond.
-                 </li>
-                 <li>
-                   Note that the data is based on power consumption of the supercomputer during
-                   the <a href="https://www.top500.org/project/linpack/">LINPACK</a> run used for
-                   its Top500 submission (the way this is measured
-                   is <a href="https://www.top500.org/green500/">described on the Green500 site).</a> This
-                   is for illustration only,
-                   and is not going to be exactly equal to the day-to-day power consumption of
-                   the supercomputer, as this will vary with the type of workload. However, it
-                   is useful to help illustrate a comparison to domestic energy consumption. It
-                   is hoped that this will encourage researchers to think carefully about the
-                   electricity costs of their supercomputer jobs. They would then take the time and
-                   effort needed to plan their experiments and optimise their codes so that
-                   they use the minimum electricity in the most efficient way possible.
-                 </li>
-               </ul>
+             <div className="w3-panel w3-pale-gray w3-leftbar w3-rightbar w3-border-light-gray w3-padding-16">
+               <div className={styles.sources}>
+                 <ul className="w3-ul">
+                  <li> The total electricity consumption of the average home
+                        in {the} {this.state.place} is {this.getPlace()} kWh per year, which
+                        is an average of {round(1000 * this.getPlace() / (365*24),0)} Watts.</li>
+                  <li>Supercomputer power information taken from the&nbsp;
+                      <a href="https://top500.org">Top500</a></li>
+                  <li>Average domestic power consumption in 2014 taken from&nbsp;
+                      <a href="https://www.wec-indicators.enerdata.eu/household-electricity-use.html">
+                        World Energy Forum figures
+                      </a>
+                  </li>
+                  <li>Average domestic energy consumption in UK in 2019 taken from&nbsp;
+                      <a href="https://www.ovoenergy.com/guides/energy-guides/how-much-electricity-does-a-home-use.html">
+                        OVO Energy guides
+                      </a>
+                  </li>
+                  <li>
+                    Conversion of energy consumption to CO2 equivalent taken from
+                    the <a href="https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2019">
+                      UK Government Greenhouse gas reporting conversion factors, 2019
+                    </a>. The conversion figure used is {kwh_to_c02} kg CO2 equivalent per kilowatt
+                    hour of electricity, which is the average for the UK grid. This is
+                    then related to air travel using {air_km_to_c02} kg CO2 equivalent per kilometer
+                    of air travel, assuming economy class long haul flights that start or end
+                    in the UK. The "Radiative Forcing" (RF) equivalent is used, as this
+                    accounts for the additional impact of aviation, e.g. emissions of
+                    nitrous oxides and water vapour at high altitude. This means that generating
+                    1 kWh in the UK generates the same CO2 equivalent as {round(kwh_to_c02 / air_km_to_c02,2)} km
+                    of air travel
+                  </li>
+                  <li>
+                    The air travel distance from London to New York
+                    is, <a href="https://www.google.com/search?q=distance+london+to+new+york+in+km&oq=distance+london+to+new+york+in+km">according to Google</a>,
+                    {nw_to_lon} km
+                  </li>
+                  <li>The PUE is the "power utilisation efficiency", and relates the
+                      electricity consumed by a data center to the actual electricity
+                      consumed by the computers in the date center. The PUE will always
+                      be greater than 1.0 as some electricity is needed to power cooling,
+                      lighting, security etc. According
+                      to <a href="https://journal.uptimeinstitute.com/is-pue-actually-going-up/">
+                        this paper
+                      </a> the average PUE is about 1.6. You
+                      can <a href="https://www.42u.com/measurement/pue-dcie.htm">calculate PUEs here</a>. This
+                      suggests that the average PUE is about 2.0, while 1.2 represents a "very efficient" data center.
+                  </li>
+                  <li>
+                    All information is presented in good faith based on values reported in
+                    the above sources. The rationale for any estimated power consumptions
+                    of supercomputers is given (essentially the median computational efficiency
+                    for the Top500 for the year the supercomputer is last published, multiplied
+                    by the reported Rmax value). If you want to correct any information or have
+                    any questions then
+                    please <a href="https://github.com/chryswoods/howmuchisenough">lodge an issue</a> and
+                    we will do our best to respond.
+                  </li>
+                  <li>
+                    Note that the data is based on power consumption of the supercomputer during
+                    the <a href="https://www.top500.org/project/linpack/">LINPACK</a> run used for
+                    its Top500 submission (the way this is measured
+                    is <a href="https://www.top500.org/green500/">described on the Green500 site).</a> This
+                    is for illustration only,
+                    and is not going to be exactly equal to the day-to-day power consumption of
+                    the supercomputer, as this will vary with the type of workload. However, it
+                    is useful to help illustrate a comparison to domestic energy consumption. It
+                    is hoped that this will encourage researchers to think carefully about the
+                    electricity costs of their supercomputer jobs. They would then take the time and
+                    effort needed to plan their experiments and optimise their codes so that
+                    they use the minimum electricity in the most efficient way possible.
+                  </li>
+                </ul>
+               </div>
              </div>
            </div>;
   }
