@@ -574,8 +574,8 @@ class HowMuch extends React.Component {
                    nitrous oxides and water vapour at high altitude.
                  </li>
                  <li>
-                   The air travel distance from London to New York is,
-                   is <a href="https://www.google.com/search?q=distance+london+to+new+york+in+km&oq=distance+london+to+new+york+in+km">according to Google</a>,
+                   The air travel distance from London to New York
+                   is, <a href="https://www.google.com/search?q=distance+london+to+new+york+in+km&oq=distance+london+to+new+york+in+km">according to Google</a>,
                    {nw_to_lon} km
                  </li>
                  <li>The PUE is the "power utilisation efficiency", and relates the
@@ -591,7 +591,7 @@ class HowMuch extends React.Component {
                  </li>
                  <li>
                    All information is presented in good faith based on values reported in
-                   the above sources. The rationale for any estimated power consumptions of
+                   the above sources. The rationale for any estimated power consumptions
                    of supercomputers is given (essentially the median computational efficiency
                    for the Top500 for the year the supercomputer is last published, multiplied
                    by the reported Rmax value). If you want to correct any information or have
@@ -601,15 +601,15 @@ class HowMuch extends React.Component {
                  </li>
                  <li>
                    Note that the data is based on power consumption of the supercomputer during
-                   the linpack run used for its Top500 submission (the way this is measured
                    is <a href="https://www.top500.org/green500/">described on the Green500 site).</a> This is for illustration only,
+                   the <a href="https://www.top500.org/project/linpack/">LINPACK</a> run used for its Top500 submission (the way this is measured
                    and is not going to be exactly equal to the day-to-day power consumption of
                    the supercomputer, as this will vary with the type of workload. However, it
                    is useful to help illustrate a comparison to domestic energy consumption. It
                    is hoped that this will encourage researchers to think carefully about the
-                   electricity costs of their supercomputer jobs, so that they take the time and
+                   electricity costs of their supercomputer jobs. They would then take the time and
                    effort needed to plan their experiments and optimise their codes so that
-                   they use the minimum electricity in the most efficient possible way.
+                   they use the minimum electricity in the most efficient way possible.
                  </li>
                </ul>
              </div>
