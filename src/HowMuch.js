@@ -468,8 +468,8 @@ class HowMuch extends React.Component {
       if (c.is_calculated){
         details = <span className={styles.details}>
                     is estimated to consume <span className={styles.nowrap}>{round(c.power/1000, 3)} megawatts</span> (based
-                    on the average efficiency of <span className={styles.nowrap}>{round(c.tflops/c.power, 1)} GFLOPs / Watt</span>
-                    of its year, and a reported RMax speed of <span className={styles.nowrap}>{c.tflops} TFLOPs</span> in {c.year}).
+                    on the average efficiency of <span className={styles.nowrap}>{round(c.tflops/c.power, 1)} GFLOPs / Watt</span> of
+                    its year, and a reported RMax speed of <span className={styles.nowrap}>{c.tflops} TFLOPs</span> in {c.year}).
                   </span>
       }
       else{
