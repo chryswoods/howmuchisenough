@@ -18,22 +18,16 @@
 .selectComputer {
   display: inline-block;
   width: 30ch;
-  max-width: 400px;
-  min-width: 200px;
 }
 
 .selectPlace {
   display: inline-block;
   width: 22ch;
-  max-width: 400px;
-  min-width: 100px;
 }
 
 .selectUnit {
   display: inline-block;
   width: 12ch;
-  max-width: 400px;
-  min-width: 100px;
 }
 
 .result {
