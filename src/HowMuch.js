@@ -601,8 +601,10 @@ class HowMuch extends React.Component {
                  </li>
                  <li>
                    Note that the data is based on power consumption of the supercomputer during
-                   is <a href="https://www.top500.org/green500/">described on the Green500 site).</a> This is for illustration only,
-                   the <a href="https://www.top500.org/project/linpack/">LINPACK</a> run used for its Top500 submission (the way this is measured
+                   the <a href="https://www.top500.org/project/linpack/">LINPACK</a> run used for
+                   its Top500 submission (the way this is measured
+                   is <a href="https://www.top500.org/green500/">described on the Green500 site).</a> This
+                   is for illustration only,
                    and is not going to be exactly equal to the day-to-day power consumption of
                    the supercomputer, as this will vary with the type of workload. However, it
                    is useful to help illustrate a comparison to domestic energy consumption. It
