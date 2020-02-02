@@ -35,6 +35,14 @@ let air_km_to_c02 = 0.14981; // kg CO2e - long haul, economy to/from UK, include
 let nw_to_lon = 5567; // distance in km from New York to London for a flight
                       // according to Google
 
+let kwh_to_gbp = 0.1035; // avg price of UK electricity per kWh for large
+                         // customers in Q3 2019, from UK Gov figures
+                         // https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/853575/table_341.xlsx
+
+let kg_co2_to_gbp = 50.0 / 1000.0; // recommended offset price per tonne is recommended
+                                   // to be £50 (polluter pays)
+                                   // http://www.lse.ac.uk/GranthamInstitute/wp-content/uploads/2019/05/GRI_POLICY-REPORT_How-to-price-carbon-to-reach-net-zero-emissions-in-the-UK.pdf
+
 class HowMuch extends React.Component {
   constructor(props){
     super(props);
@@ -45,6 +53,8 @@ class HowMuch extends React.Component {
                   count: 1.0,
                   time: 0,
                   percent: 100,
+                  cost: kwh_to_gbp,
+                  offset: kg_co2_to_gbp,
                   times: [["hour", 1],
                           ["day", 24],
                           ["week", 24*7],
@@ -544,6 +554,15 @@ class HowMuch extends React.Component {
                {this.calculateLonNY()}
              </div>
 
+            <div className="w3-panel w3-pale-blue w3-leftbar w3-rightbar w3-border-blue w3-padding-16">
+              Assuming electricity costs £{kwh_to_gbp} per kWh, the total cost of the electricity
+              consumed by this job will
+              be <span className={styles.result}>£{round(kwh_to_gbp*this._calculateKWH(true),2)}</span>.
+              Assuming the recommended price of £{kg_co2_to_gbp} per kg, the cost to offset the
+              carbon produced by this job would
+              be <span className={styles.result}>£{round(kg_co2_to_gbp*this._calculateCO2(true),2)}</span>.
+            </div>
+
              <div className="w3-panel w3-pale-gray w3-leftbar w3-rightbar w3-border-light-gray w3-padding-16">
                <div className={styles.sources}>
                  <ul className="w3-ul">
@@ -561,6 +580,17 @@ class HowMuch extends React.Component {
                       <a href="https://www.ovoenergy.com/guides/energy-guides/how-much-electricity-does-a-home-use.html">
                         OVO Energy guides
                       </a>
+                  </li>
+                  <li>
+                    Average UK price per kWh for large consumers in Q3 2019 is £{kwh_to_gbp}, taken
+                    from <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/853575/table_341.xlsx">
+                      this UK Governent spreadsheet
+                    </a>.
+                  </li>
+                  <li>
+                    <a href="http://www.lse.ac.uk/GranthamInstitute/wp-content/uploads/2019/05/GRI_POLICY-REPORT_How-to-price-carbon-to-reach-net-zero-emissions-in-the-UK.pdf">
+                      This LSE report
+                    </a> recommends that the price per tonne for offsetting CO2 should be £50.
                   </li>
                   <li>
                     Conversion of energy consumption to CO2 equivalent taken from
