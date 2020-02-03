@@ -584,7 +584,7 @@ class HowMuch extends React.Component {
                   <li>
                     Average UK price per kWh for large consumers in Q3 2019 is £{kwh_to_gbp}, taken
                     from <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/853575/table_341.xlsx">
-                      this UK Governent spreadsheet
+                      this UK Government spreadsheet
                     </a>.
                   </li>
                   <li>
