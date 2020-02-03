@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "6ca6412b59e2f958af85c05ddf01c390",
+    "revision": "2c4edb8054953810778b1f549cb343a4",
     "url": "/howmuchisenough/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/howmuchisenough/static/css/2.a7daffc7.chunk.css"
   },
   {
-    "revision": "e8ccd6d8ca6c32da234b",
+    "revision": "cbdeaf1ddf343705c5bf",
     "url": "/howmuchisenough/static/css/4.236faea8.chunk.css"
   },
   {
@@ -28,15 +28,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/howmuchisenough/static/js/3.c3643e96.chunk.js"
   },
   {
-    "revision": "e8ccd6d8ca6c32da234b",
-    "url": "/howmuchisenough/static/js/4.c03f2de2.chunk.js"
+    "revision": "cbdeaf1ddf343705c5bf",
+    "url": "/howmuchisenough/static/js/4.1c81da14.chunk.js"
   },
   {
     "revision": "0f60cf43afdeba75cddf",
     "url": "/howmuchisenough/static/js/main.d1831d81.chunk.js"
   },
   {
-    "revision": "23faafd032bd799c5b06",
-    "url": "/howmuchisenough/static/js/runtime-main.3bbab770.js"
+    "revision": "03904d53b75b9a6673a5",
+    "url": "/howmuchisenough/static/js/runtime-main.48fd0e10.js"
   }
 ]);
